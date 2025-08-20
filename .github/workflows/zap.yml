@@ -1,8 +1,8 @@
 # .github/workflows/zap.yml
-name: ZAP baseline (prod)
+name: ZAP baseline (live)
 on:
   workflow_run:
-    workflows: ["Deploy site (prod)"]
+    workflows: ["Deploy site (live)"]
     types: [completed]
 
 jobs:
