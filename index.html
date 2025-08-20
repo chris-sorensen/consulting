@@ -10,6 +10,17 @@
   <style>
     html { scroll-behavior: smooth; }
   </style>
+  <!-- CSP + referrer -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+           script-src 'self' https://cdn.tailwindcss.com;
+           style-src 'self' 'unsafe-inline';
+           img-src 'self' data:;
+           connect-src 'self';
+           frame-ancestors 'none';
+           base-uri 'self';
+           form-action https://formspree.io">
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <!-- Open Graph -->
   <meta property="og:title" content="CS Freedom Advisory — Fractional CTO & Cloud/SRE Consulting" />
   <meta property="og:description" content="Cloud/SRE modernization, DevSecOps, and compliance acceleration for startups and enterprises." />
