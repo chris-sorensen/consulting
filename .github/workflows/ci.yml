@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  html-validate:
+    name: Validate HTML & links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Validate HTML & CSS + check images/links (Nu HTML Validator + HTMLProofer)
+      - uses: anishathalye/proof-html@v2   # Marketplace "Proof HTML"
+        with:
+          directory: .
+          enforce_https: true
+          check_favicon: true
+          check_opengraph: true
+
+  linkcheck:
+    name: Broken-link scan (lychee)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2   # Fast link checker
+        with:
+          #args: --verbose --no-progress --exclude-code  "**/*.md" "**/*.html"
+          args: >-
+            --verbose
+            --no-progress
+            --exclude "localhost|127\.0\.0\.1"
+            .
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  markdown:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: |
+            **/*.md
+
+  secrets:
+    name: Secrets scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gitleaks/gitleaks-action@v2
+        with:
+          args: detect --source . --no-git --verbose --redact
+        env:
+          GITLEAKS_ENABLE_COMMENTS: "true"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  accessibility:
+    name: Accessibility (pa11y-ci)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      # Serve the static files
+      - run: npx http-server -p 8080 . & sleep 2
+      - run: npx pa11y-ci
+
+
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm i -D @lhci/cli
+      - run: npx lhci autorun --upload.target=temporary-public-storage
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{secrets.LHCI_GITHUB_APP_TOKEN || ''}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

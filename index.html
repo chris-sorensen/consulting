@@ -10,11 +10,22 @@
   <style>
     html { scroll-behavior: smooth; }
   </style>
+  <!-- CSP + referrer -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+           script-src 'self' https://cdn.tailwindcss.com;
+           style-src 'self' 'unsafe-inline';
+           img-src 'self' data:;
+           connect-src 'self';
+           frame-ancestors 'none';
+           base-uri 'self';
+           form-action https://formspree.io">
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <!-- Open Graph -->
   <meta property="og:title" content="CS Freedom Advisory — Fractional CTO & Cloud/SRE Consulting" />
   <meta property="og:description" content="Cloud/SRE modernization, DevSecOps, and compliance acceleration for startups and enterprises." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://chris-sorensen.github.io/" />
+  <meta property="og:url" content="https://chris-sorensen.github.io/consulting/" />
   <!-- Structured Data -->
   <script type="application/ld+json">
   {
@@ -22,7 +33,7 @@
     "@type": "ProfessionalService",
     "name": "CS Freedom Advisory",
     "description": "Fractional CTO & Cloud/SRE/DevSecOps consulting. Compliance-driven modernization: SOC2, FedRAMP, SSDF.",
-    "url": "https://chris-sorensen.github.io/",
+    "url": "https://chris-sorensen.github.io/consulting/",
     "areaServed": "Global",
     "founder": {"@type": "Person", "name": "Chris Sorensen"}
   }
@@ -284,7 +295,7 @@
 # usage: klogs &lt;app-name&gt; [namespace]
 klogs() {
   local app="$1"; local ns="${2:-default}";
-  if [ -z "$app" ]; then echo "usage: klogs <app-name> [namespace]"; return 1; fi
+  if [ -z "$app" ]; then echo "usage: klogs &lt;app-name&gt; [namespace]"; return 1; fi
   kubectl logs -n "$ns" -l app="$app" -f --max-log-requests=20 --tail=200
 }
 # install: add this function to your ~/.zshrc or ~/.bashrc and `source` it</code></pre>
