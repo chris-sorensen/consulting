@@ -9,6 +9,9 @@ My marketing site for Fractional CTO & Cloud/SRE/DevSecOps consulting. Complianc
 
 [chris-sorensen.github.io/consulting](https://chris-sorensen.github.io/consulting/)
 
+→ Lighthouse
+[Report](https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1755663229122-90690.report.html)
+
 ## Repo layout
 
 - `index.html` – single-file site (Tailwind CDN)

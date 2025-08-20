@@ -5,6 +5,8 @@ on:
 
 permissions:
   contents: write
+  issues: write
+  pull-requests: write
 
 concurrency: preview-${{ github.ref }}
 
@@ -21,6 +23,5 @@ jobs:
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto
-	env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}
+          
 
