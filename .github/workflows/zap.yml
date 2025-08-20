@@ -13,6 +13,6 @@ jobs:
       - name: ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.11.0
         with:
-          target: https://chris-sorensen.github.io/
+          target: https://chris-sorensen.github.io/consulting/
           cmd_options: -a -m 5
 
