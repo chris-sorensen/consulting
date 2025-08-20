@@ -51,6 +51,7 @@ jobs:
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITLEAKS_ENABLE_COMMENTS: "true"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   accessibility:
     name: Accessibility (pa11y-ci)
@@ -59,9 +60,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
-      - run: npm i -D pa11y-ci
+
+      # Serve the static files
       - run: npx http-server -p 8080 . & sleep 2
-      - run: npx pa11y-ci --sitemap http://localhost:8080/sitemap.xml || npx pa11y-ci http://localhost:8080/index.html
+      - run: npx pa11y-ci
+
 
   lighthouse:
     name: Lighthouse CI
@@ -74,4 +77,5 @@ jobs:
       - run: npx lhci autorun --upload.target=temporary-public-storage
         env:
           LHCI_GITHUB_APP_TOKEN: ${{secrets.LHCI_GITHUB_APP_TOKEN || ''}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
