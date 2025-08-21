@@ -1,0 +1,81 @@
+name: Publish Lighthouse report
+
+on:
+  workflow_run:
+    workflows: ["Deploy site (live)"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      # Serve your site files locally for Lighthouse to test
+      - run: npm i -D lighthouse@12 http-server@14
+      - run: npx http-server -p 8080 . & sleep 2
+
+      # Run Lighthouse and produce HTML + JSON
+      - name: Run Lighthouse
+        run: |
+          mkdir -p lhci-out
+          npx lighthouse http://localhost:8080/ \
+            --output=json --output=html \
+            --output-path=lhci-out/report \
+            --quiet --chrome-flags="--no-sandbox"
+
+          # Build summary + badge endpoint
+          node -e '
+            const fs=require("fs");
+            const r=JSON.parse(fs.readFileSync("lhci-out/report.report.json","utf8"));
+            const s={
+              perf: Math.round(r.categories.performance.score*100),
+              a11y: Math.round(r.categories.accessibility.score*100),
+              seo:  Math.round(r.categories.seo.score*100),
+              best: Math.round(r.categories["best-practices"].score*100)
+            };
+            fs.writeFileSync("lhci-out/summary.json", JSON.stringify({
+              runId: process.env.GITHUB_RUN_ID,
+              sha: process.env.GITHUB_SHA,
+              ref: process.env.GITHUB_REF,
+              generated: new Date().toISOString(),
+              scores: s
+            }, null, 2));
+            const color = (s.perf>=90 && s.a11y>=90 && s.seo>=90 && s.best>=90) ? "brightgreen"
+                        : (s.perf>=70 && s.a11y>=70 && s.seo>=70 && s.best>=70) ? "yellow" : "red";
+            fs.writeFileSync("lhci-out/shields.json", JSON.stringify({
+              schemaVersion: 1,
+              label: "lighthouse",
+              message: `P${s.perf} A${s.a11y} BP${s.best} SEO${s.seo}`,
+              color
+            }, null, 2));
+            fs.copyFileSync("lhci-out/report.report.html","lhci-out/index.html");
+          '
+
+      # Stage to the reports path
+      - name: Stage reports
+        run: |
+          mkdir -p out/reports/lighthouse/${{ github.run_id }}
+          cp -r lhci-out/* out/reports/lighthouse/${{ github.run_id }}/
+          rm -rf out/reports/lighthouse/latest
+          mkdir -p out/reports/lighthouse/latest
+          cp -r lhci-out/* out/reports/lighthouse/latest/
+
+      # Push ONLY /reports to gh-pages without cleaning the site
+      - name: Publish to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: out
+          target-folder: .
+          clean: false
+

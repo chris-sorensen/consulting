@@ -2,6 +2,7 @@
 
 ![CI](https://github.com/chris-sorensen/consulting/actions/workflows/ci.yml/badge.svg)
 ![Deploy](https://github.com/chris-sorensen/consulting/actions/workflows/deploy.yml/badge.svg)
+[![Lighthouse](https://img.shields.io/endpoint?url=https://chris-sorensen.github.io/consulting/reports/lighthouse/latest/shields.json)](https://chris-sorensen.github.io/consulting/reports/lighthouse/latest/)
 
 My marketing site for Fractional CTO & Cloud/SRE/DevSecOps consulting. Compliance-driven modernization for high-growth teams.
 
@@ -9,14 +10,11 @@ My marketing site for Fractional CTO & Cloud/SRE/DevSecOps consulting. Complianc
 
 [chris-sorensen.github.io/consulting](https://chris-sorensen.github.io/consulting/)
 
-→ Lighthouse
-[Report](https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1755663229122-90690.report.html)
-
 ## Repo layout
 
-- `index.html` – single-file site (Tailwind CDN)
+- `index.html` – site (Tailwind CDN)
 
-- `.github/workflows/` – CI, preview, deploy
+- `.github/workflows/` – CI, preview, deploy, scanners
 
 - `sitemap.xml`, `robots.txt` – SEO basics
 
