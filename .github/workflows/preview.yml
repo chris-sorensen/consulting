@@ -16,6 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Build Tailwind CSS
+        run: |
+          npm i -D tailwindcss@3.4.13
+          npx tailwindcss -i assets/input.css -o assets/site.css --minify
+
       - name: Deploy (create/update/remove) preview
         uses: rossjrw/pr-preview-action@v1
         with:

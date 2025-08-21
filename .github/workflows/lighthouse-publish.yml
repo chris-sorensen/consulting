@@ -17,18 +17,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1) Ensure Chrome is installed and discoverable
+      # Ensure Chrome is installed
       - uses: browser-actions/setup-chrome@v1
 
-      # 2) Install tools (LH + static server + wait-on)
+      # Install tools (LH + static server + wait-on)
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
       - run: npm i -D lighthouse@12 http-server@14 wait-on@7
 
-      # 3) Serve your static site and wait until it's live
+      # Build the static assets
+      - name: Build Tailwind CSS
+        run: npx --yes tailwindcss -i assets/input.css -o assets/site.css --minify
+
+      # Serve the static site and wait until it's live
       - run: npx http-server -p 8080 . & npx wait-on http://127.0.0.1:8080/index.html
 
-      # 4) Run Lighthouse with CI-friendly flags
+      # Run Lighthouse with CI-friendly flags
       - name: Run Lighthouse
         run: |
           mkdir -p lhci-out
@@ -66,7 +70,7 @@ jobs:
             fs.copyFileSync("lhci-out/report.report.html","lhci-out/index.html");
           '
 
-      # 5) Publish reports to gh-pages:/reports/...
+      # Publish reports to gh-pages:/reports/...
       - name: Stage reports
         run: |
           mkdir -p out/reports/lighthouse/${{ github.run_id }}

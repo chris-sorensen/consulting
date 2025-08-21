@@ -11,7 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # No build step; static files live at repo root
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Build Tailwind CSS
+        run: |
+          npm i -D tailwindcss@3.4.13
+          npx tailwindcss -i assets/input.css -o assets/site.css --minify
+
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
