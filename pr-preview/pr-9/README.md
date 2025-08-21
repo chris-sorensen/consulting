@@ -4,7 +4,6 @@
 ![Deploy](https://github.com/chris-sorensen/consulting/actions/workflows/deploy.yml/badge.svg)
 [![Lighthouse](https://img.shields.io/endpoint?url=https://chris-sorensen.github.io/consulting/reports/lighthouse/latest/shields.json)](https://chris-sorensen.github.io/consulting/reports/lighthouse/latest/)
 
-
 My marketing site for Fractional CTO & Cloud/SRE/DevSecOps consulting. Compliance-driven modernization for high-growth teams.
 
 ## Live site
