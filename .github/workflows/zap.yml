@@ -11,8 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.11.0
+        uses: zaproxy/action-baseline@v0.14.0
         with:
-          target: https://chris-sorensen.github.io/consulting/
-          cmd_options: -a -m 5
+          target: 'https://chris-sorensen.github.io/consulting/'
+          rules_file_name: '.zap/rules.tsv'
+          # Avoid artifact API error:
+          artifact_name: 'zap-scan-${{ github.run_id }}'
+          # Keep a single rolling issue rather than creating many:
+          issue_title: 'ZAP Scan Baseline Report'
+          # Avoid AF writing zap.yaml in the mounted workspace
+          cmd_options: >-
+            --autooff
+            -m 5
+            -d
+
 
