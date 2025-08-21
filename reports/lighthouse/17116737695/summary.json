@@ -1,0 +1,12 @@
+{
+  "runId": "17116737695",
+  "sha": "465e7b0c1d137fa3e8df69da10bcc9ea17057f1c",
+  "ref": "refs/heads/main",
+  "generated": "2025-08-21T04:03:10.314Z",
+  "scores": {
+    "perf": 73,
+    "a11y": 100,
+    "seo": 91,
+    "best": 93
+  }
+}
