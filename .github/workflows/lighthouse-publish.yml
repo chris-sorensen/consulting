@@ -17,23 +17,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 1) Ensure Chrome is installed and discoverable
+      - uses: browser-actions/setup-chrome@v1
+
+      # 2) Install tools (LH + static server + wait-on)
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
+      - run: npm i -D lighthouse@12 http-server@14 wait-on@7
 
-      # Serve your site files locally for Lighthouse to test
-      - run: npm i -D lighthouse@12 http-server@14
-      - run: npx http-server -p 8080 . & sleep 2
+      # 3) Serve your static site and wait until it's live
+      - run: npx http-server -p 8080 . & npx wait-on http://127.0.0.1:8080/index.html
 
-      # Run Lighthouse and produce HTML + JSON
+      # 4) Run Lighthouse with CI-friendly flags
       - name: Run Lighthouse
         run: |
           mkdir -p lhci-out
-          npx lighthouse http://localhost:8080/ \
+          npx lighthouse http://127.0.0.1:8080/index.html \
             --output=json --output=html \
             --output-path=lhci-out/report \
-            --quiet --chrome-flags="--no-sandbox"
+            --quiet \
+            --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage --disable-gpu"
 
-          # Build summary + badge endpoint
+          # Build summary and shields badge
           node -e '
             const fs=require("fs");
             const r=JSON.parse(fs.readFileSync("lhci-out/report.report.json","utf8"));
@@ -50,8 +55,8 @@ jobs:
               generated: new Date().toISOString(),
               scores: s
             }, null, 2));
-            const color = (s.perf>=90 && s.a11y>=90 && s.seo>=90 && s.best>=90) ? "brightgreen"
-                        : (s.perf>=70 && s.a11y>=70 && s.seo>=70 && s.best>=70) ? "yellow" : "red";
+            const color=(s.perf>=90&&s.a11y>=90&&s.seo>=90&&s.best>=90)?"brightgreen":
+                        (s.perf>=70&&s.a11y>=70&&s.seo>=70&&s.best>=70)?"yellow":"red";
             fs.writeFileSync("lhci-out/shields.json", JSON.stringify({
               schemaVersion: 1,
               label: "lighthouse",
@@ -61,7 +66,7 @@ jobs:
             fs.copyFileSync("lhci-out/report.report.html","lhci-out/index.html");
           '
 
-      # Stage to the reports path
+      # 5) Publish reports to gh-pages:/reports/...
       - name: Stage reports
         run: |
           mkdir -p out/reports/lighthouse/${{ github.run_id }}
@@ -70,7 +75,6 @@ jobs:
           mkdir -p out/reports/lighthouse/latest
           cp -r lhci-out/* out/reports/lighthouse/latest/
 
-      # Push ONLY /reports to gh-pages without cleaning the site
       - name: Publish to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -78,4 +82,3 @@ jobs:
           folder: out
           target-folder: .
           clean: false
-
