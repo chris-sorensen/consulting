@@ -23,7 +23,7 @@ jobs:
       # Install tools (LH + static server + wait-on)
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
-      - run: npm i -D lighthouse@12 http-server@14 wait-on@7
+      - run: npm i -D lighthouse@12 http-server@14 wait-on@7 tailwindcss@3.4.13
 
       # Build the static assets
       - name: Build Tailwind CSS

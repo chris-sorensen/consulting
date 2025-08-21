@@ -21,13 +21,20 @@ jobs:
         run: |
           npm i -D tailwindcss@3.4.13
           npx tailwindcss -i assets/input.css -o assets/site.css --minify
+
+      - name: Cleanup deps before validation
+        run: rm -rf node_modules package*.json assets/input.css
+
       # Validate HTML & CSS + check images/links (Nu HTML Validator + HTMLProofer)
       - uses: anishathalye/proof-html@v2   # Marketplace "Proof HTML"
         with:
           directory: .
           enforce_https: true
+          check_html: true
           check_favicon: true
           check_opengraph: true
+          check_css: true
+
 
   linkcheck:
     name: Broken-link scan (lychee)
@@ -41,6 +48,10 @@ jobs:
         run: |
           npm i -D tailwindcss@3.4.13
           npx tailwindcss -i assets/input.css -o assets/site.css --minify
+
+      - name: Cleanup deps before validation
+        run: rm -rf node_modules package*.json assets/input.css
+
       - uses: lycheeverse/lychee-action@v2   # Fast link checker
         with:
           args: >-
