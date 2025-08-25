@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SRE Maturity in 8 Weeks — CS Freedom Advisory</title>
+  <meta name="description" content="A focused playbook for SLOs, incident hygiene, and platform reliability that actually sticks. An 8‑week plan that ships a paved path for your most critical systems." />
+  <link rel="icon" href="/favicon.ico" />  <link rel="preload" as="style" href="../assets/site.css" />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <meta property="og:title" content="SRE Maturity in 8 Weeks — Sorensen Advisory" />
+  <meta property="og:description" content="A focused playbook for SLOs, incident hygiene, and platform reliability that actually sticks. An 8‑week plan that ships a paved path for your most critical systems." />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="/favicon.ico" />
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { color: #111827; }
+      a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+      article { box-shadow: none !important; border: 0 !important; }
+      .prose { max-width: none; }
+    }
+    /* modest typography when Tailwind typography plugin isn't present */
+    .prose h1 { font-size: 2rem; line-height: 1.2; font-weight: 800; }
+    .prose h2 { font-size: 1.5rem; line-height: 1.3; font-weight: 700; margin-top: 2rem; }
+    .prose h3 { font-size: 1.25rem; line-height: 1.3; font-weight: 600; margin-top: 1.25rem; }
+    .prose p { margin-top: 0.75rem; }
+    .prose ul { margin-left: 1.25rem; list-style: disc; }
+    .prose code, .prose pre { background: #f8fafc; padding: 0.2em 0.4em; border-radius: 0.375rem; }
+    .prose pre { padding: 1rem; overflow:auto; }
+    .prose hr { border: 0; border-top: 1px solid #e5e7eb; margin: 2rem 0; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+<header class="no-print sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+    <a href="../index.html" class="font-semibold tracking-tight">CS Freedom<span class="text-indigo-600">Advisory</span></a>
+    <nav class="text-sm hidden sm:flex gap-5">
+      <a class="hover:text-indigo-600" href="../index.html#insights">Insights</a>
+      <a class="hover:text-indigo-600" href="../index.html#services">Services</a>
+      <a class="hover:text-indigo-600" href="../index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="no-print mb-6 flex flex-wrap items-center gap-3">
+    <a href="../index.html#insights" class="text-sm text-indigo-600 underline">← Back to Insights</a>
+    <button onclick="window.print()" class="ml-auto inline-flex items-center rounded-md border px-3 py-1.5 text-sm bg-white hover:bg-slate-50">Download PDF</button>
+  </div>
+
+  <article class="prose max-w-none rounded-2xl border bg-white p-6 shadow">
+    <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">SRE Maturity in 8 Weeks</h1>
+    <p><strong>A focused playbook for SLOs, incident hygiene, and platform reliability that actually sticks</strong></p>
+    <hr/>
+
+    <h2>Executive summary</h2>
+    <p>In most organizations, reliability initiatives stall because the scope is too broad, the targets are aspirational rather than empirical, and the day‑to‑day operating model never changes. This 8‑week playbook solves that by:</p>
+    <ul>
+      <li><strong>Scoping ruthlessly</strong> to the <em>smallest set of critical services</em> that carry outsized business value.</li>
+      <li><strong>Basing targets on reality</strong>: measure how systems behave today, then refine SLOs/SLAs and set error budgets you can actually honor.</li>
+      <li><strong>Integrating reliability into how work flows</strong>: incident hygiene, change management, and SDLC gates tied to error budgets—up to and including <strong>pausing risky deployments</strong> when stability is threatened.</li>
+      <li><strong>Shipping a paved path</strong>: golden patterns, templates, and automation you can fan out to the rest of the estate after the first wins.</li>
+    </ul>
+    <p>The result is a repeatable, auditable reliability program that improves customer outcomes without paralyzing delivery.</p>
+
+    <h2>Principles</h2>
+    <ol>
+      <li><strong>Prioritize by business criticality.</strong> Not all components deserve the same engineering attention. Select the top <strong>3–5 services</strong> or customer journeys that create or protect the most revenue.</li>
+      <li><strong>Measure what customers feel.</strong> Define SLIs that mirror user experience—availability, latency (p95/p99), correctness, and freshness. Cost and efficiency can be tracked, but don’t let them replace experience SLIs.</li>
+      <li><strong>Start with reality, not aspiration.</strong> Baseline real performance (last 30–90 days). Draft SLOs that reflect current behavior; tighten over time.</li>
+      <li><strong>Make error budgets real.</strong> Error budgets must be simple to understand, easy to calculate, and enforced through incident management and SDLC gates.</li>
+      <li><strong>Automate the boring, standardize the rest.</strong> Golden dashboards, alert policies, runbooks, post‑mortem templates, and CI/CD checks are the paved path.</li>
+    </ol>
+
+    <h2>Scope: pick the right “thin slice”</h2>
+    <p>A thin, high‑value slice is the difference between traction and thrash. Use a <strong>criticality mapping</strong> exercise:</p>
+    <ul>
+      <li><strong>Inventory</strong>: list services/systems and map to <strong>key user journeys</strong> (e.g., “checkout completes,” “report loads within 5s”).</li>
+      <li><strong>Business impact</strong>: estimate $/minute loss or churn risk for each journey.</li>
+      <li><strong>Feasibility</strong>: instrumentation readiness, team ownership, and expected lift.</li>
+      <li><strong>Select</strong>: pick the subset where impact × feasibility is highest. Typically this yields <strong>3–5 services</strong> and <strong>2–4 user journeys</strong>.</li>
+    </ul>
+    <p><em>Deliverable:</em> <em>Service–Journey matrix</em> with a ranked list and owners.</p>
+
+    <h2>SLIs, SLOs, SLAs: crisp definitions</h2>
+    <ul>
+      <li><strong>SLI</strong> (Service Level Indicator): a <em>measurement</em> of experience. Examples: success rate, p95 latency, data freshness.</li>
+      <li><strong>SLO</strong> (Objective): a <em>target</em> for an SLI over a window. Example: <em>“p95 checkout latency ≤ 600ms over 28 days.”</em></li>
+      <li><strong>SLA</strong> (Agreement): a <em>contract</em> with customers; typically downstream of SLOs and includes remedies/credits.</li>
+    </ul>
+
+    <h3>Choosing SLIs that matter</h3>
+    <p>For each selected journey, define 2–4 SLIs:</p>
+    <ul>
+      <li><strong>Availability</strong>: success / total requests (filter to “good” responses).</li>
+      <li><strong>Latency</strong>: p95 and/or p99 of end‑to‑end duration (client to durable write).</li>
+      <li><strong>Correctness</strong>: percent of responses with expected shape/invariants.</li>
+      <li><strong>Freshness</strong>: age of data powering the UI, or lag to eventual consistency.</li>
+    </ul>
+
+    <h3>From baseline to SLO</h3>
+    <ol>
+      <li><strong>Measure</strong> current SLIs (ideally 28–30 days) via logs/traces/metrics and synthetics.</li>
+      <li><strong>Propose</strong> draft SLOs at or slightly better than the median of current performance.</li>
+      <li><strong>Review with product &amp; customer‑facing teams</strong>—ensure targets mirror customer expectations and seasonality.</li>
+      <li><strong>Ratify</strong> v1 SLOs with clear ownership and a date to revisit (e.g., quarterly).</li>
+    </ol>
+
+    <h3>Error budgets</h3>
+    <p>If SLO is 99.9% monthly availability, the <strong>error budget</strong> is 0.1% of minutes in the window:</p>
+    <ul>
+      <li>30 days = 43,200 minutes → budget = <strong>43.2 minutes</strong> of “bad minutes.”</li>
+      <li>Track <strong>burn rate</strong> across short and long windows (e.g., 1h and 6h) to detect acute and chronic burn.</li>
+    </ul>
+
+    <p><strong>Burn‑rate alert policy (example)</strong></p>
+    <ul>
+      <li><strong>Page</strong> when 1‑hour burn rate ≥ <strong>14.4×</strong> (risk of exhausting 30‑day budget within ~2 hours).</li>
+      <li><strong>Page</strong> when 6‑hour burn rate ≥ <strong>6×</strong> (sustained incident).</li>
+      <li><strong>Ticket</strong> when 3‑day burn rate ≥ <strong>2×</strong> (chronic degradation).</li>
+    </ul>
+
+    <h2>Incident hygiene: the operating model</h2>
+    <p>A reliable platform needs reliable process.</p>
+    <ul>
+      <li><strong>Severity matrix</strong> tied to customer impact and SLO burn (e.g., Sev‑1 if active burn ≥ 14× and key journey unavailable).</li>
+      <li><strong>Roles</strong>: Incident Commander, Communications, Ops, and Subject‑Matter Leads.</li>
+      <li><strong>Runbooks</strong>: concise, one‑page actions with links to dashboards and rollback.</li>
+      <li><strong>Post‑incident reviews</strong>: blameless, small set of actionable items with owners and due dates.</li>
+      <li><strong>Tagging &amp; taxonomy</strong>: every incident tagged to service/journey, failure mode, and root cause classification to surface systemic issues.</li>
+    </ul>
+
+    <p><strong>Integration points</strong></p>
+    <ul>
+      <li><strong>On‑call</strong> rotations formalized; paging only on customer‑impacting signals (SLOs), not raw metrics.</li>
+      <li><strong>Change management</strong>: deployments automatically annotated into traces/metrics; feature flags for safe rollouts.</li>
+      <li><strong>SDLC gates</strong>: when a service exhausts the error budget, <strong>high‑risk changes are paused</strong> or go through additional approval until the budget resets.</li>
+    </ul>
+
+    <h2>The 8‑week plan</h2>
+    <h3>Week 1 — Kickoff, scope, and charter</h3>
+    <ul>
+      <li>Identify executive sponsor and working team (product + engineering + SRE).</li>
+      <li>Build the service–journey matrix and select the thin slice.</li>
+      <li>Agree on decision rights, cadence, and success metrics.</li>
+      <li>Stand up a shared <strong>reliability backlog</strong>.</li>
+    </ul>
+    <p><em>Artifacts</em>: charter, RACI, ranked service–journey matrix, backlog.</p>
+
+    <h3>Week 2 — Instrumentation and SLIs</h3>
+    <ul>
+      <li>Map signals to sources: logs, traces, metrics, synthetics.</li>
+      <li>Standardize telemetry: trace IDs in logs, request IDs across services.</li>
+      <li>Implement <strong>golden dashboards</strong> per service (availability, latency, saturation, errors).</li>
+      <li>Draft SLIs and begin baselining.</li>
+    </ul>
+    <p><em>Artifacts</em>: SLI catalog; dashboard templates.</p>
+
+    <h3>Week 3 — Baseline &amp; draft SLOs</h3>
+    <ul>
+      <li>Gather 14–30 days of SLI data (pull historical where possible).</li>
+      <li>Draft SLOs per journey with product and support alignment.</li>
+      <li>Define the <strong>error budget policy</strong> (thresholds, actions, SLDC gates).</li>
+    </ul>
+    <p><em>Artifacts</em>: SLO proposals; error budget policy v1.</p>
+
+    <h3>Week 4 — Alerts and incident hygiene</h3>
+    <ul>
+      <li>Convert SLOs into <strong>burn‑rate alerts</strong> (short + long windows).</li>
+      <li>Wire paging routes, escalation policies, and on‑call calendars.</li>
+      <li>Create runbook skeletons; launch incident channels and templates.</li>
+    </ul>
+    <p><em>Artifacts</em>: alert policies; runbooks; incident templates.</p>
+
+    <h3>Week 5 — Change safety and reliability work intake</h3>
+    <ul>
+      <li>Add deployment annotations and release health checks.</li>
+      <li>Enable canary or progressive delivery for at least one key service.</li>
+      <li>Connect the error budget policy to SDLC gates (e.g., CI job checks or change approvals).</li>
+      <li>Triage top <strong>toil</strong> sources and open platform tickets.</li>
+    </ul>
+    <p><em>Artifacts</em>: CI/CD checks; release checklist; toil reduction list.</p>
+
+    <h3>Week 6 — Game day and capacity validation</h3>
+    <ul>
+      <li>Run a <strong>game day</strong> on one or two likely failure modes (dependency outage, region failover, cache flood).</li>
+      <li>Validate capacity assumptions (autoscaling, limits, backpressure).</li>
+      <li>Update runbooks based on findings; refine SLOs if reality differs.</li>
+    </ul>
+    <p><em>Artifacts</em>: game day report; updated runbooks; capacity notes.</p>
+
+    <h3>Week 7 — Adoption round 2 and reporting</h3>
+    <ul>
+      <li>Apply the paved path to <strong>one additional service</strong>.</li>
+      <li>Publish reliability reports: SLO attainment, incidents by tag, MTTx, change failure rate.</li>
+      <li>Review with execs: what improved, where to invest next.</li>
+    </ul>
+    <p><em>Artifacts</em>: service #2 onboarding; SLO report; leadership update.</p>
+
+    <h3>Week 8 — Codify the paved path &amp; executive readout</h3>
+    <ul>
+      <li>Freeze the <strong>golden patterns</strong>: SLO template, alert policies, dashboards, runbooks, post‑incident template.</li>
+      <li>Finalize governance: review cadence (monthly), ownership, and annual target‑setting.</li>
+      <li>Publish the <strong>fan‑out plan</strong> for the next quarter.</li>
+    </ul>
+    <p><em>Artifacts</em>: paved‑path package; program governance doc; roadmap.</p>
+
+    <h2>The paved path (what “done” looks like)</h2>
+    <p><strong>Reusable templates and automation</strong> checked into a discoverable repo:</p>
+    <ul>
+      <li><strong>SLO spec</strong> (YAML or JSON): SLI query, window, target, owner, dashboard link.</li>
+      <li><strong>Alert policies</strong>: multi‑window burn rate (e.g., 5m/1h and 1h/6h), ticketing/webhook routes.</li>
+      <li><strong>Dashboards</strong>: per service and per journey, with standardized panels.</li>
+      <li><strong>Runbook template</strong>: prerequisites, triage tree, rollback steps, comms.</li>
+      <li><strong>Post‑incident template</strong>: summary, timeline, impact, contributing factors, actions.</li>
+      <li><strong>CI/CD checks</strong>: error‑budget gate, change freeze override via executive approval.</li>
+    </ul>
+
+    <pre><code>
+service: checkout-api
+journey: submit_order
+owner: team-payments
+sli:
+  type: latency
+  percentile: p95
+  query: sum(rate(http_request_duration_seconds_bucket{le="0.6",service="checkout"}[5m]))
+         / sum(rate(http_request_duration_seconds_count{service="checkout"}[5m]))
+window: 28d
+objective: ">= 99% of requests ≤ 600ms"
+error_budget:
+  window_minutes: 40320   # 28 days
+  budget_minutes: 40.32   # 0.1% of 28 days
+alerts:
+  - name: fast-burn
+    policy: burn_rate &gt;= 14.4 over 1h  # page
+  - name: slow-burn
+    policy: burn_rate &gt;= 6 over 6h     # page
+  - name: chronic
+    policy: burn_rate &gt;= 2 over 3d     # ticket
+links:
+  dashboard: https://observability.example/d/checkout
+  runbook: https://runbooks.example/checkout</code></pre>
+
+    <h2>Governance and cadence</h2>
+    <ul>
+      <li><strong>Ownership</strong>: every SLO has a named <strong>engineering owner</strong> and a <strong>product owner</strong>.</li>
+      <li><strong>Reviews</strong>: monthly SLO review (attainment, burn events, actions); quarterly target tune‑ups.</li>
+      <li><strong>Change policy</strong>: error‑budget‑driven—if a service is out of budget, risky deploys are paused until budget resets or an executive approves an exception.</li>
+      <li><strong>Transparency</strong>: publish a simple internal <strong>reliability scorecard</strong> each month.</li>
+    </ul>
+
+    <h2>Anti‑patterns to avoid</h2>
+    <ul>
+      <li><strong>Metric‑first paging</strong> (CPU, memory, queue depth) without customer‑visible impact → alert fatigue.</li>
+      <li><strong>Too many SLOs</strong> per service → dilution and confusion. Start with two or three.</li>
+      <li><strong>Aspirational SLOs</strong> that don’t match reality → constant breach and no behavior change.</li>
+      <li><strong>Ignoring product</strong>: SLOs set by ops alone miss what customers feel.</li>
+      <li><strong>Permanent freezes</strong>: if your error budget policy only blocks delivery, teams will route around it. Clear exit criteria and time‑boxed pauses are essential.</li>
+    </ul>
+
+    <h2>Measuring impact (what leaders will ask)</h2>
+    <ul>
+      <li><strong>Customer outcomes</strong>: fewer Sev‑1/Sev‑2 incidents on critical journeys; improved CSAT/NPS tied to those journeys.</li>
+      <li><strong>Engineering velocity</strong>: change failure rate and MTTR drop; on‑call interruptions decrease; fewer rollbacks.</li>
+      <li><strong>Financials</strong>: fewer credits (SLA), lower unplanned work; cost efficiency from right‑sizing and reduced thrash.</li>
+      <li><strong>Program health</strong>: SLO adoption rate, adherence to runbooks, post‑incident action closure within SLA.</li>
+    </ul>
+
+    <h2>Roles and time commitment (minimal but real)</h2>
+    <ul>
+      <li><strong>Sponsor (VP Eng/CTO)</strong>: unblockers and policy backing (1–2 hours/week).</li>
+      <li><strong>SRE Lead / Facilitator</strong>: runs the playbook, authors paved path (50–75% FTE for 8 weeks).</li>
+      <li><strong>Service Owners (2–4 teams)</strong>: instrumentation and adoption (2–4 hours/week each, with bursts).</li>
+      <li><strong>Product/Support partners</strong>: define user journeys and SLA implications (1–2 hours/week).</li>
+    </ul>
+
+    <h2>Tooling (vendor‑neutral)</h2>
+    <ul>
+      <li><strong>Observability</strong>: OpenTelemetry + Prometheus/Grafana, or Datadog/New Relic.</li>
+      <li><strong>Paging &amp; incident</strong>: PagerDuty/Opsgenie + Slack/Teams; Jira/ServiceNow for follow‑ups.</li>
+      <li><strong>Synthetics</strong>: k6, Playwright, or vendor equivalents.</li>
+      <li><strong>Delivery</strong>: GitHub Actions, ArgoCD/Flux, feature flagging (LaunchDarkly/OpenFeature).</li>
+    </ul>
+
+    <h2>Conclusion</h2>
+    <p>You can <strong>raise reliability within two months</strong> without stopping feature work—if you pick a narrow, valuable scope, measure what customers feel, and wire reliability into the way changes are made. A single <strong>golden pattern</strong> across your most critical services produces immediate customer benefit and a <strong>reusable operating model</strong>. From there, fan‑out is an execution detail, not a reinvention.</p>
+
+    <hr/>
+    <h3>Appendix A — Sample incident severity matrix (sketch)</h3>
+    <ul>
+      <li><strong>Sev‑1</strong>: Key journey unavailable or &gt;50% error; active burn ≥ 14×; page + exec comms; 24×7 response.</li>
+      <li><strong>Sev‑2</strong>: Degraded experience; active burn 6–14×; page; incident comms.</li>
+      <li><strong>Sev‑3</strong>: Minor impact; active burn 2–6×; ticket; business‑hours response.</li>
+    </ul>
+
+    <h3>Appendix B — Post‑incident review template (outline)</h3>
+    <ol>
+      <li>Summary (what/when/impact)</li>
+      <li>Timeline with sources of truth (logs, dashboards, PRs)</li>
+      <li>Contributing factors (technical, process, organization)</li>
+      <li>Customer impact (SLO burn, SLA credits if any)</li>
+      <li>What went well / what didn’t</li>
+      <li><strong>Actions</strong> with owners and due dates (limit to 3–5)</li>
+    </ol>
+
+    <p class="mt-10 text-sm text-slate-500">*Prepared by CS Freedom Advisory.*</p>
+  </article>
+
+  <div class="no-print mt-8 flex flex-wrap items-center gap-4 text-sm">
+    <a class="inline-flex items-center gap-2" href="https://chris-sorensen.github.io/consulting/reports/lighthouse/latest/" data-proofer-ignore target="_blank" rel="noopener">
+      <img alt="Lighthouse badge" src="https://img.shields.io/endpoint?url=https://chris-sorensen.github.io/consulting/reports/lighthouse/latest/shields.json" />
+    </a>
+    <span class="text-slate-500">Latest Lighthouse: P≥95 A100 BP≥90 SEO100</span>
+  </div>
+</main>
+
+<footer class="no-print py-10 border-t bg-white mt-10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p>© <span id="year"></span> CS Freedom Advisory</p>
+    <nav class="flex gap-4">
+      <a class="hover:text-indigo-600" href="../index.html#about">About</a>
+      <a class="hover:text-indigo-600" href="../index.html#contact">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
