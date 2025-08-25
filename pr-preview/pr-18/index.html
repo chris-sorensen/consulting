@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CS Freedom Advisory — Fractional CTO & Cloud/SRE Consulting</title>
+  <meta name="description" content="Fractional CTO, Cloud/SRE/DevSecOps, and compliance-driven modernization for high-growth teams. SOC2, FedRAMP, SSDF. Advisory, roadmaps, and transformation sprints." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preload" as="style" href="assets/site.css" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
+  <!-- CSP + referrer -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+           script-src 'self' https://cdn.tailwindcss.com;
+           style-src 'self' 'unsafe-inline';
+           img-src 'self' data:;
+           connect-src 'self';
+           frame-ancestors 'none';
+           base-uri 'self';
+           form-action https://formspree.io">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <!-- Open Graph -->
+  <meta property="og:title" content="CS Freedom Advisory — Fractional CTO & Cloud/SRE Consulting" />
+  <meta property="og:description" content="Cloud/SRE modernization, DevSecOps, and compliance acceleration for startups and enterprises." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://chris-sorensen.github.io/consulting/" />
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "CS Freedom Advisory",
+    "description": "Fractional CTO & Cloud/SRE/DevSecOps consulting. Compliance-driven modernization: SOC2, FedRAMP, SSDF.",
+    "url": "https://chris-sorensen.github.io/consulting/",
+    "areaServed": "Global",
+    "founder": {"@type": "Person", "name": "Chris Sorensen"}
+  }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#top" class="font-semibold text-lg tracking-tight">CSFreedom<span class="text-indigo-600">Advisory</span></a>
+        <nav class="hidden md:flex gap-6 text-sm">
+          <a href="#who" class="hover:text-indigo-600">Who I Help</a>
+          <a href="#services" class="hover:text-indigo-600">Core Offerings</a>
+          <a href="#engagements" class="hover:text-indigo-600">Engagements</a>
+          <a href="#value" class="hover:text-indigo-600">Delivery & Differentiation</a>
+          <a href="#cases" class="hover:text-indigo-600">Case Studies</a>
+          <a href="#insights" class="hover:text-indigo-600">Insights</a>
+          <a href="#about" class="hover:text-indigo-600">About</a>
+          <a href="#contact" class="hover:text-indigo-600">Contact</a>
+        </nav>
+        <button id="menuBtn" class="md:hidden inline-flex items-center justify-center rounded-md p-2 focus:outline-none focus:ring" aria-label="Open menu">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200">
+      <div class="px-4 py-3 space-y-2 text-sm">
+        <a href="#who" class="block">Who I Help</a>
+        <a href="#services" class="block">Core Offerings</a>
+        <a href="#engagements" class="block">Engagements</a>
+        <a href="#value" class="block">Delivery & Differentiation</a>
+        <a href="#cases" class="block">Case Studies</a>
+        <a href="#insights" class="block">Insights</a>
+        <a href="#about" class="block">About</a>
+        <a href="#contact" class="block">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="top" class="relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">Fractional CTO & Cloud/SRE Advisor for High‑Growth Teams</h1>
+          <p class="mt-5 text-lg text-slate-700">Accelerating cloud transformation, compliance readiness, and DevSecOps adoption with 20 years of hands‑on experience in software engineering, infrastructure, and security.</p>
+          <div class="mt-8 flex gap-3">
+            <a href="#contact" class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white shadow hover:bg-indigo-700">Let’s Talk</a>
+            <a href="#services" class="inline-flex items-center justify-center rounded-lg border px-5 py-3 font-medium hover:bg-white">Explore Services</a>
+          </div>
+        </div>
+        <div class="lg:pl-10">
+          <div class="rounded-2xl border bg-white p-6 shadow-sm">
+            <ul class="space-y-4 text-sm">
+              <li class="flex gap-3"><span class="mt-1 inline-block h-2 w-2 rounded-full bg-indigo-600"></span><span><strong>Compliance-Driven Modernization:</strong> SOC2, FedRAMP, SSDF — secure-by-default patterns that pass audits.</span></li>
+              <li class="flex gap-3"><span class="mt-1 inline-block h-2 w-2 rounded-full bg-indigo-600"></span><span><strong>Cloud/SRE Outcomes:</strong> reliability, cost control, and operational simplicity at scale.</span></li>
+              <li class="flex gap-3"><span class="mt-1 inline-block h-2 w-2 rounded-full bg-indigo-600"></span><span><strong>DevSecOps Velocity:</strong> GitOps, IaC, Quality Gates — faster delivery with embedded security.</span></li>
+              <li class="flex gap-3"><span class="mt-1 inline-block h-2 w-2 rounded-full bg-indigo-600"></span><span><strong>Executive Partnership:</strong> roadmap, org design, and board-ready narratives.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who I Help -->
+  <section id="who" class="py-16 border-t bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold tracking-tight">Who I Help</h2>
+      <div class="mt-6 grid md:grid-cols-3 gap-6">
+        <div class="rounded-2xl border p-6 bg-slate-50">
+          <h3 class="font-semibold">Founders & CEOs</h3>
+          <p class="mt-2 text-sm text-slate-700">High-growth companies needing senior technical leadership without a full-time CTO hire.</p>
+        </div>
+        <div class="rounded-2xl border p-6 bg-slate-50">
+          <h3 class="font-semibold">CTOs & Engineering Leaders</h3>
+          <p class="mt-2 text-sm text-slate-700">Scaling teams, cloud spend, and platform reliability while meeting compliance demands.</p>
+        </div>
+        <div class="rounded-2xl border p-6 bg-slate-50">
+          <h3 class="font-semibold">Enterprises & Regulated Orgs</h3>
+          <p class="mt-2 text-sm text-slate-700">SOC2, FedRAMP, SSDF, and modernization of legacy systems — with measurable outcomes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services / Core Offerings -->
+  <section id="services" class="py-16 border-t">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold tracking-tight">Core Offerings</h2>
+      <div class="mt-8 grid lg:grid-cols-2 gap-8">
+        <div class="rounded-2xl border p-6 bg-white">
+          <h3 class="text-lg font-semibold">Fractional CTO & Advisory</h3>
+          <p class="mt-2 text-sm text-slate-700">Strategic guidance, technical roadmaps, org design, and board-facing communication. Align product, platform, and security for sustainable velocity.</p>
+          <ul class="mt-4 list-disc pl-5 text-sm text-slate-700 space-y-1">
+            <li>Quarterly roadmaps & metrics</li>
+            <li>Architecture reviews & trade-off decisions</li>
+            <li>Hiring, leveling, and team operating models</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl border p-6 bg-white">
+          <h3 class="text-lg font-semibold">Cloud & SRE Modernization</h3>
+          <p class="mt-2 text-sm text-slate-700">Audit, optimize, and scale AWS/GCP for security, reliability, and cost control. Build resilient, observable systems with sane defaults.</p>
+          <ul class="mt-4 list-disc pl-5 text-sm text-slate-700 space-y-1">
+            <li>Reliability/SLO & incident readiness</li>
+            <li>Serverless and Multi-cluster Kubernetes patterns</li>
+            <li>FinOps & 20–40% cost savings targets</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl border p-6 bg-white">
+          <h3 class="text-lg font-semibold">Compliance-Driven Infra Transformation</h3>
+          <p class="mt-2 text-sm text-slate-700">Accelerate SOC2, FedRAMP, and SSDF with secure-by-default DevSecOps patterns and evidence generation built into delivery.</p>
+          <ul class="mt-4 list-disc pl-5 text-sm text-slate-700 space-y-1">
+            <li>Gap analysis & prioritized roadmap</li>
+            <li>Control mapping to pipelines & IaC</li>
+            <li>Evidence automation & audit support</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl border p-6 bg-white">
+          <h3 class="text-lg font-semibold">DevSecOps & CI/CD Automation</h3>
+          <p class="mt-2 text-sm text-slate-700">Modern delivery on GitHub Actions, Terraform, and ArgoCD. Golden paths, reusable modules, and secure supply chain from commit to prod.</p>
+          <ul class="mt-4 list-disc pl-5 text-sm text-slate-700 space-y-1">
+            <li>Secure Software Factories</li>
+            <li>SSDF-aligned pipelines & attestations</li>
+            <li>Tools that align with your release management strategy</li>
+            <li>Policy-as-code, secrets, and RBAC</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Engagements (no pricing) -->
+  <section id="engagements" class="py-16 border-t bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold tracking-tight">Engagement Examples</h2>
+      <div class="mt-8 grid md:grid-cols-2 gap-8">
+        <div class="rounded-2xl border p-6">
+          <h3 class="font-semibold">Fractional CTO Retainer</h3>
+          <p class="mt-2 text-sm text-slate-700">Hands-on executive partnership (8–20 hrs/week). Cadenced leadership, roadmap execution, and critical decisions across product, platform, and security.</p>
+        </div>
+        <div class="rounded-2xl border p-6">
+          <h3 class="font-semibold">Modernization Sprint (6–8 weeks)</h3>
+          <p class="mt-2 text-sm text-slate-700">Fixed-scope push to deliver a Cloud/SRE audit, compliance plan, or CI/CD transformation. Clear outcomes, artifacts, and leadership readouts.</p>
+        </div>
+        <div class="rounded-2xl border p-6">
+          <h3 class="font-semibold">Technical Roadmap Workshop</h3>
+          <p class="mt-2 text-sm text-slate-700">Multi-day deep dive aligning business goals with architectural realities. Prioritized initiatives with investment-level clarity.</p>
+        </div>
+        <div class="rounded-2xl border p-6">
+          <h3 class="font-semibold">Targeted Assessments</h3>
+          <p class="mt-2 text-sm text-slate-700">SDLC analysis, Cloud cost savings, resilience reviews, SOC2/FedRAMP gap analyses, security posture checks — with actionable, time-bounded plans.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Delivery & Differentiation -->
+  <section id="value" class="py-16 border-t">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold tracking-tight">Delivery & Differentiation</h2>
+      <div class="mt-6 grid md:grid-cols-2 gap-8">
+        <div class="rounded-2xl border p-6 bg-white">
+          <h3 class="font-semibold">Playbooks, not guesswork</h3>
+          <p class="mt-2 text-sm text-slate-700">Standardized audit frameworks and implementation templates cut risk and time-to-value. Repeatable outcomes, faster.</p>
+          <ul class="mt-4 text-sm text-slate-700 list-disc pl-5 space-y-1">
+            <li>OIDC identity blueprints for GitHub → AWS/GCP</li>
+            <li>Golden-path CI/CD templates (SSDF-aligned)</li>
+            <li>Integration with ticketing systems</li>
+            <li>Clear metrics and measurables</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl border p-6 bg-white">
+          <h3 class="font-semibold">Force multipliers</h3>
+          <p class="mt-2 text-sm text-slate-700">Automations and evidence generation save hundreds of engineering hours and streamline audits.</p>
+          <ul class="mt-4 text-sm text-slate-700 list-disc pl-5 space-y-1">
+            <li>Cost controls with guardrails & policy-as-code</li>
+            <li>Built-in observability dashboards & SLOs</li>
+            <li>Automated audit artifacts from pipelines/IaC</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+   <!-- Case Studies -->
+   <section id="cases" class="py-16 border-t bg-white">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <h2 class="text-2xl font-bold tracking-tight">Case Studies</h2>
+       <p class="mt-2 text-sm text-slate-600">Setting the bar for secure software delivery.</p>
+       <div class="mt-8 grid md:grid-cols-3 gap-8">
+         <article class="rounded-2xl border p-6 bg-slate-50">
+           <h3 class="font-semibold">Modernizing CI/CD for a SaaS Platform</h3>
+           <p class="mt-2 text-sm text-slate-700">Rebuilt pipelines + SSDF controls and golden paths. <br><br><b>Result:</b> faster lead time, improved supply chain security, and cleaner audit evidence.</p>
+           <ul class="mt-3 text-xs text-slate-600 list-disc pl-5 space-y-1">
+             <li>SSDF-aligned attestations & provenance</li>
+             <li>Support release trains, progressive rollouts, feature flagging, blue/green/canary, and a/b testing</li>
+             <li>Artifact promotion after passing quality rigor</li>
+             <li>Principle of Least Privilege in each segment of the pipeline</li>
+             <li>Policy-as-code guardrails</li>
+           </ul>
+         </article>
+         <article class="rounded-2xl border p-6 bg-slate-50">
+           <h3 class="font-semibold">Compliance Readiness, On Time</h3>
+           <p class="mt-2 text-sm text-slate-700">Structured gap analysis → prioritized roadmap → evidence automation. <br><br><b>Result:</b> audit-ready delivery with minimal engineering drag.</p>
+           <ul class="mt-3 text-xs text-slate-600 list-disc pl-5 space-y-1">
+             <li>Control mapping to pipelines/IaC</li>
+             <li>Automated evidence capture</li>
+             <li>Executive reporting & artifacts</li>
+           </ul>
+         </article>
+         <article class="rounded-2xl border p-6 bg-slate-50">
+           <h3 class="font-semibold">SRE & FinOps at Scale</h3>
+           <p class="mt-2 text-sm text-slate-700">Introduced SLOs, capacity plans, and cost guardrails. <br><br><b>Result:</b> fewer incidents and significant cloud savings without sacrificing velocity.</p>
+           <ul class="mt-3 text-xs text-slate-600 list-disc pl-5 space-y-1">
+             <li>Software Catalog and Service Maturity Model</li>
+             <li>Right‑sizing & autoscaling patterns</li>
+             <li>Dashboards tied to business KPIs</li>
+           </ul>
+         </article>
+       </div>
+     </div>
+   </section>
+ 
+   <!-- Insights -->
+   <section id="insights" class="py-16 border-t">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <h2 class="text-2xl font-bold tracking-tight">Insights</h2>
+       <p class="mt-2 text-sm text-slate-600">White papers and short, practical posts for leaders and senior engineers.</p>
+       <div class="mt-8 grid md:grid-cols-3 gap-8">
+         <article class="rounded-2xl border p-6 bg-white">
+           <div class="text-xs text-slate-500">White paper</div>
+           <h3 class="mt-1 font-semibold">SSDF for GitHub Actions: A Pragmatic Path</h3>
+           <p class="mt-2 text-sm text-slate-700">How to add provenance, attestations, and guardrails to existing pipelines without a full rebuild.</p>
+           <a href="#" class="mt-3 inline-block text-sm text-indigo-600 underline">Read more</a>
+         </article>
+         <article class="rounded-2xl border p-6 bg-white">
+           <div class="text-xs text-slate-500">White paper</div>
+           <h3 class="mt-1 font-semibold">SRE Maturity in 8 Weeks</h3>
+           <p class="mt-2 text-sm text-slate-700">A focused playbook for SLOs, incident hygiene, and platform reliability that actually sticks.</p>
+           <a href="insights/sre-maturity-in-8-weeks.html" class="inline-flex items-center gap-1 underline">Read more</a>
+         </article>
+         <article class="rounded-2xl border p-6 bg-white">
+           <div class="text-xs text-slate-500">White paper</div>
+           <h3 class="mt-1 font-semibold">OIDC/WIF Done Right</h3>
+           <p class="mt-2 text-sm text-slate-700">Attribute-based access, least privilege, and multi‑tenant guardrails for GitHub → AWS/GCP.</p>
+           <a href="#" class="mt-3 inline-block text-sm text-indigo-600 underline">Read more</a>
+         </article>
+       </div>
+ 
+       <details class="mt-10 rounded-2xl border p-6 bg-slate-50">
+         <summary class="font-semibold cursor-pointer">Developer: Alias / 1‑liner of the Week (copy‑ready)</summary>
+         <p class="mt-3 text-sm text-slate-700">Click <em>Copy</em> to drop it into your shell. </p>
+         <div class="mt-4 relative">
+           <button type="button" class="copy-btn absolute right-2 top-2 rounded-md border px-3 py-1 text-xs font-medium hover:bg-white" data-copy-id="snippet-1">Copy</button>
+           <pre id="snippet-1" class="mt-8 text-xs overflow-auto rounded-lg border bg-white p-4"><code class="language-bash"># klogs: stream logs from all pods with label app=&lt;name&gt; (default ns unless provided)
+# usage: klogs &lt;app-name&gt; [namespace]
+klogs() {
+  local app="$1"; local ns="${2:-default}";
+  if [ -z "$app" ]; then echo "usage: klogs &lt;app-name&gt; [namespace]"; return 1; fi
+  kubectl logs -n "$ns" -l app="$app" -f --max-log-requests=20 --tail=200
+}
+# install: add this function to your ~/.zshrc or ~/.bashrc and `source` it</code></pre>
+         </div>
+       </details>
+     </div>
+   </section>
+
+  <!-- About -->
+  <section id="about" class="py-16 border-t bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold tracking-tight">About</h2>
+      <div class="mt-6 grid lg:grid-cols-3 gap-8 items-start">
+        <div class="lg:col-span-2">
+          <p class="text-slate-700">Chris Sorensen is a technology leader with nearly two decades in software engineering, DevSecOps, and cloud infrastructure automation. He has led high-performing teams across Fortune 500s, finance, eCommerce, startups, and the public sector, including DoD and intelligence work.</p>
+          <p class="mt-4 text-slate-700">Most recently at Blackpoint Cyber and as an Engineering Manager at Pantheon Systems, Chris oversaw release engineering, DevSecOps, and infra automation. He’s designed CI/CD platforms, Kubernetes architectures, Cloud/Datacenter migrations, and identity federation strategies used by thousands of engineers.</p>
+          <p class="mt-4 text-slate-700">Areas of focus: Software Development, Kubernetes, Terraform, GitHub Actions, AWS/GCP, observability, Security, SOC2/FedRAMP/SSDF. Chris pairs deep technical expertise with executive communication to deliver faster delivery, stronger compliance, and meaningful cost savings.</p>
+        </div>
+        <aside class="rounded-2xl border p-6 bg-slate-50">
+          <h3 class="font-semibold">Highlights</h3>
+          <ul class="mt-3 text-sm text-slate-700 space-y-2 list-disc pl-5">
+            <li>Built centralized WIF/OIDC program for secure CI/CD</li>
+            <li>Scaled multi-cluster K8s</li>
+            <li>Implemented SSDF-aligned pipelines & attestations</li>
+            <li>Delivered multi‑million $ cloud savings initiatives</li>
+            <li>Replaced expensive vendor monoliths with free open source software</li>
+            <li>Moved a 7k server Windows shop on-prem to Linux on AWS</li>
+            <li>Tech refresh of F500 ecommerce infrastructure</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-16 border-t">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold tracking-tight">Contact</h2>
+      <p class="mt-3 text-slate-700">Interested in advisory, a modernization sprint, or a targeted assessment? Send a note and I’ll reply promptly.</p>
+      <div class="mt-8 rounded-2xl border bg-white p-6">
+        <form action="https://formspree.io/f/your-form-id" method="POST" class="grid gap-4">
+          <label class="text-sm">
+            <span class="block mb-1">Name</span>
+            <input name="name" required class="w-full rounded-lg border px-3 py-2" />
+          </label>
+          <label class="text-sm">
+            <span class="block mb-1">Email</span>
+            <input type="email" name="email" required class="w-full rounded-lg border px-3 py-2" />
+          </label>
+          <label class="text-sm">
+            <span class="block mb-1">Company</span>
+            <input name="company" class="w-full rounded-lg border px-3 py-2" />
+          </label>
+          <label class="text-sm">
+            <span class="block mb-1">How can I help?</span>
+            <textarea name="message" rows="5" required class="w-full rounded-lg border px-3 py-2"></textarea>
+          </label>
+          <div class="flex items-center justify-between">
+            <p class="text-xs text-slate-500">Or email directly: <a class="underline" href="mailto:climb.aspen8536@eagereverest.com">climb.aspen8536@eagereverest.com</a></p>
+            <button type="submit" class="rounded-lg bg-indigo-600 px-5 py-2.5 text-white font-medium hover:bg-indigo-700">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-10 border-t bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-600 flex flex-col md:flex-row items-center justify-between gap-3">
+      <p>© <span id="year"></span> CS Freedom Advisory. All rights reserved.</p>
+      <nav class="flex gap-4">
+        <a href="#top" class="hover:text-indigo-600">Back to top</a>
+        <a href="#about" class="hover:text-indigo-600">About</a>
+        <a href="#contact" class="hover:text-indigo-600">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const btn = document.getElementById('menuBtn');
+    const menu = document.getElementById('mobileMenu');
+    btn?.addEventListener('click', () => menu.classList.toggle('hidden'));
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
