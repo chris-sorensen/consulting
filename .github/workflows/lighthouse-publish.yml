@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # Ensure Chrome is installed
-      - uses: browser-actions/setup-chrome@v1
+      - uses: browser-actions/setup-chrome@v2
 
       # Install tools (LH + static server + wait-on)
       - uses: actions/setup-node@v4
