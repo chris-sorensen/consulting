@@ -1,0 +1,18 @@
+# _config.yml
+markdown: kramdown
+highlighter: rouge
+
+# Don’t let Jekyll traverse previews, modules, or build/report folders
+exclude:
+  - pr-preview/
+  - pr-preview/**/*
+  - node_modules/
+  - "**/node_modules/**"
+  - reports/
+  - .github/
+  - .zap/
+  - .gitignore
+  - package.json
+  - package-lock.json
+  - README.md   # if your site isn't meant to render your README into _site
+
