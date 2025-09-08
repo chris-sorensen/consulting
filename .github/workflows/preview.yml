@@ -16,40 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-
-      - name: Build Tailwind CSS
-        run: |
-          npm i -D tailwindcss@3.4.13
-          npx tailwindcss -i assets/input.css -o assets/site.css --minify
-
-      - name: Prepare preview bundle
-        run: |
-          rm -rf site
-          mkdir -p site
-          cp -a index.html site/
-          cp -a insights site/ || true
-          cp -a assets site/ || true
-          cp -a favicon.ico site/ || true
-          touch site/.nojekyll
-
-      # Ensure gh-pages root has .nojekyll so GH Pages never runs Jekyll on previews
-      - name: Ensure .nojekyll at gh-pages root
-        if: ${{ github.event.action == 'opened' }}
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: .
-          target-folder: .
-          clean: false
-          # publish only the single file
-          git-config-email: github-actions[bot]@users.noreply.github.com
-          git-config-name: github-actions[bot]
-        env:
-          # create a temp .nojekyll file at workspace root just for this push
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: touch .nojekyll
+      - uses: ./.github/actions/stage-site
 
       - name: Deploy (create/update/remove) preview
         uses: rossjrw/pr-preview-action@v1

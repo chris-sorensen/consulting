@@ -2,12 +2,11 @@
   "defaults": {
     "standard": "WCAG2AA",
     "timeout": 30000,
-    "chromeLaunchConfig": {
-      "args": ["--no-sandbox", "--disable-setuid-sandbox"]
-    }
+    "chromeLaunchConfig": { "args": ["--no-sandbox", "--disable-dev-shm-usage"] }
   },
   "urls": [
-    "http://localhost:8080/index.html"
+    "http://127.0.0.1:8080/index.html",
+    "http://127.0.0.1:8080/insights/sre-maturity-in-8-weeks.html"
   ]
 }
 
