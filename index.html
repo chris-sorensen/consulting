@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CS Freedom Advisory — Fractional CTO & Cloud/SRE Consulting</title>
   <meta name="description" content="Fractional CTO, Cloud/SRE/DevSecOps, and compliance-driven modernization for high-growth teams. SOC2, FedRAMP, SSDF. Advisory, roadmaps, and transformation sprints." />
-  <link rel="icon" href="/consulting/favicon.ico" />
+  <link rel="icon" href="/consulting/favicon.ico" type="image/x-icon" />
   <link rel="preload" as="style" href="/consulting/assets/site.css" />
   <link rel="stylesheet" href="/consulting/assets/site.css" />
   <style>
@@ -14,11 +14,10 @@
   <!-- CSP + referrer -->
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self';
-           script-src 'self' https://cdn.tailwindcss.com;
+           script-src 'self';
            style-src 'self' 'unsafe-inline';
            img-src 'self' data:;
            connect-src 'self';
-           frame-ancestors 'none';
            base-uri 'self';
            form-action https://formspree.io">
   <meta name="referrer" content="no-referrer-when-downgrade">
@@ -77,7 +76,7 @@
   </header>
 
   <!-- Hero (avoid sectioning element around the H1 to prevent UA deprecation) -->
-  <div id="top" class="relative overflow-hidden" role="region" aria-labelledby="page-title">
+  <div id="top" class="relative overflow-hidden" role="region" aria-label="Primary navigation">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="grid lg:grid-cols-2 gap-10 items-center">
         <div>
@@ -375,13 +374,7 @@ klogs() {
     </div>
   </footer>
 
-  <script>
-    // Mobile menu toggle
-    const btn = document.getElementById('menuBtn');
-    const menu = document.getElementById('mobileMenu');
-    btn?.addEventListener('click', () => menu.classList.toggle('hidden'));
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+    <!-- Scripts -->
+  <script src="assets/site.js" defer></script>
 </body>
 </html>
