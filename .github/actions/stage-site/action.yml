@@ -11,7 +11,7 @@ runs:
       run: |
         set -euo pipefail
         if [ -f assets/input.css ]; then
-          npx --yes tailwindcss@3.4.13 -i assets/input.css -o assets/site.css --minify
+          npx --yes tailwindcss@3.4.13 -c tailwind.config.js -i assets/input.css -o assets/site.css --minify
         fi
 
     - name: Stage site content
