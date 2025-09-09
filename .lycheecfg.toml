@@ -1,0 +1,10 @@
+verbose = "true"
+no_progress = "true"
+exclude = [
+  "localhost",
+  "127\\.0\\.0\\.1",
+  "chris-sorensen\\.github\\.io/consulting/reports/lighthouse/latest/?$"
+]
+
+# Resolve root-relative links (e.g., /favicon.ico) when scanning local files
+base = "https://chris-sorensen.github.io/consulting/"

@@ -1,7 +1,7 @@
 name: Deploy PR preview
 on:
   pull_request:
-    types: [opened, reopened, synchronize, closed]
+    types: [opened, reopened, synchronize]
 
 permissions:
   contents: write
@@ -26,3 +26,59 @@ jobs:
           umbrella-dir: pr-preview
           action: auto
 
+      - name: Compute preview URL
+        id: urls
+        run: |
+          PR=${{ github.event.pull_request.number }}
+          echo "url=https://chris-sorensen.github.io/consulting/pr-preview/pr-${PR}/index.html" >> $GITHUB_OUTPUT
+
+      - name: Wait for preview to be live
+        run: |
+          URL='${{ steps.urls.outputs.url }}'
+          for i in {1..60}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || true)
+            if [ "$code" = "200" ]; then echo "OK"; exit 0; fi
+            sleep 3
+          done
+          echo "Preview not reachable"; exit 1
+
+      - name: Lighthouse on PR Preview (non-blocking)
+        continue-on-error: true
+        run: |
+          npm i -D lighthouse@12
+          npx lighthouse '${{ steps.urls.outputs.url }}' \
+            --output=json --output=html --output-path=lhci-pr \
+            --quiet \
+            --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage"
+          node -e '
+            const fs=require("fs"),r=JSON.parse(fs.readFileSync("lhci-pr.report.json","utf8"));
+            const s={perf:Math.round(r.categories.performance.score*100),
+                     a11y:Math.round(r.categories.accessibility.score*100),
+                     seo:Math.round(r.categories.seo.score*100),
+                     best:Math.round(r.categories["best-practices"].score*100)};
+            fs.writeFileSync("lhci-pr-summary.json", JSON.stringify(s));
+          '
+      - name: Upload PR artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-pr-${{ github.event.pull_request.number }}
+          path: |
+            lhci-pr.report.html
+            lhci-pr.report.json
+            lhci-pr-summary.json
+
+      - name: Comment scores on PR
+        if: always()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: lhci-pr
+          message: |
+            **Lighthouse (PR Preview)** for ${{ steps.urls.outputs.url }}
+            | Perf | A11y | Best | SEO |
+            |---:|---:|---:|---:|
+            | ${{ fromJson(steps.read.outputs.s).perf }} | ${{ fromJson(steps.read.outputs.s).a11y }} | ${{ fromJson(steps.read.outputs.s).best }} | ${{ fromJson(steps.read.outputs.s).seo }} |
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - id: read
+        run: echo "s=$(cat lhci-pr-summary.json)" >> $GITHUB_OUTPUT
