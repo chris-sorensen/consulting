@@ -26,6 +26,9 @@ jobs:
           check_favicon: true
           check_opengraph: true
           check_css: true
+          # Rewrite root-absolute /consulting/* to /
+          swap_urls: >
+            {"^/consulting/": "/"}
 
   linkcheck:
     name: Broken-link scan (lychee)
