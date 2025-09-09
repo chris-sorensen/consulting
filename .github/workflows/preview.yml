@@ -8,7 +8,7 @@ permissions:
   issues: write
   pull-requests: write
 
-concurrency: preview-${{ github.ref }}
+concurrency: preview-${{ github.event.pull_request.number || github.ref }}
 
 jobs:
   preview:
@@ -16,20 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-
-      - name: Build Tailwind CSS
-        run: |
-          npm i -D tailwindcss@3.4.13
-          npx tailwindcss -i assets/input.css -o assets/site.css --minify
+      - uses: ./.github/actions/stage-site
 
       - name: Deploy (create/update/remove) preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: .
+          source-dir: site
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto
-          
 

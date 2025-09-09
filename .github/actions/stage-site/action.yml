@@ -1,0 +1,40 @@
+name: Stage static site
+description: Build Tailwind (if input.css present) and stage minimal site/ dir with .nojekyll and Jekyll excludes
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with: { node-version: '20' }
+
+    - name: Build Tailwind CSS (if assets/input.css exists)
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [ -f assets/input.css ]; then
+          npx --yes tailwindcss@3.4.13 -i assets/input.css -o assets/site.css --minify
+        fi
+
+    - name: Stage site content
+      shell: bash
+      run: |
+        set -euo pipefail
+        rm -rf site
+        mkdir -p site/assets
+        # publish only what the site needs
+        cp -a index.html site/
+        [ -d insights ] && cp -a insights site/ || true
+        [ -f assets/site.css ] && cp -a assets/site.css site/assets/site.css
+        [ -f favicon.ico ] && cp -a favicon.ico site/
+        # disable Jekyll at serve time
+        touch site/.nojekyll
+        # help the GitHub "Pages build and deployment" job ignore preview/report folders
+        cat > site/_config.yml <<'YAML'
+        exclude:
+          - pr-preview/
+          - pr-preview/**/*
+          - node_modules/
+          - "**/node_modules/**"
+          - reports/
+          - ".github/"
+        YAML
+
