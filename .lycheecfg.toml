@@ -1,5 +1,5 @@
-verbose = "true"
-no_progress = "true"
+verbose = true
+no_progress = true
 exclude = [
   "localhost",
   "127\\.0\\.0\\.1",
