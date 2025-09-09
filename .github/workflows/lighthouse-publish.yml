@@ -1,4 +1,4 @@
-name: Publish Lighthouse report
+name: Publish Lighthouse report (live)
 
 on:
   workflow_run:
@@ -14,49 +14,59 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
 
+    env:
+      LIVE_URL: https://chris-sorensen.github.io/consulting/
+
     steps:
       - uses: actions/checkout@v5
 
-      # Ensure Chrome is installed
+      # Chrome for Lighthouse
       - uses: browser-actions/setup-chrome@v1
 
-      # Install tools (LH + static server + wait-on)
+      # Node for npx
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
-      - run: npm i -D lighthouse@12 http-server@14 wait-on@7 tailwindcss@3.4.13
 
-      # Build the static assets
-      - name: Build Tailwind CSS
-        run: npx --yes tailwindcss -i assets/input.css -o assets/site.css --minify
+      # Give GitHub Pages a few seconds to serve the fresh content after deploy
+      - name: Wait for live site
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Waiting for $LIVE_URL"
+          for i in {1..60}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$LIVE_URL" || true)
+            if [ "$code" = "200" ]; then echo "OK ($code)"; exit 0; fi
+            sleep 3
+          done
+          echo "Site not reachable in time"; exit 1
 
-      # Serve the static site and wait until it's live
-      - run: npx http-server -p 8080 . & npx wait-on http://127.0.0.1:8080/index.html
-
-      # Run Lighthouse with CI-friendly flags
-      - name: Run Lighthouse
+      # Run Lighthouse against the LIVE site (no asserts here—publish only)
+      - name: Run Lighthouse (live)
         run: |
           mkdir -p lhci-out
-          npx lighthouse http://127.0.0.1:8080/index.html \
+          npx -y lighthouse@12 "$LIVE_URL" \
             --output=json --output=html \
-            --output-path=lhci-out/report \
+            --output-path=lhci-out/live \
             --quiet \
             --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage --disable-gpu"
 
-          # Build summary and shields badge
+          # Build summary + Shields badge files
           node -e '
             const fs=require("fs");
-            const r=JSON.parse(fs.readFileSync("lhci-out/report.report.json","utf8"));
+            const p="lhci-out/live.report.json";
+            const r=JSON.parse(fs.readFileSync(p,"utf8"));
             const s={
               perf: Math.round(r.categories.performance.score*100),
               a11y: Math.round(r.categories.accessibility.score*100),
               seo:  Math.round(r.categories.seo.score*100),
               best: Math.round(r.categories["best-practices"].score*100)
             };
-            fs.writeFileSync("lhci-out/summary.json", JSON.stringify({
+            fs.writeFileSync("lhci-out/live-summary.json", JSON.stringify({
               runId: process.env.GITHUB_RUN_ID,
               sha: process.env.GITHUB_SHA,
               ref: process.env.GITHUB_REF,
               generated: new Date().toISOString(),
+              url: process.env.LIVE_URL,
               scores: s
             }, null, 2));
             const color=(s.perf>=90&&s.a11y>=90&&s.seo>=90&&s.best>=90)?"brightgreen":
@@ -67,11 +77,18 @@ jobs:
               message: `P${s.perf} A${s.a11y} BP${s.best} SEO${s.seo}`,
               color
             }, null, 2));
-            fs.copyFileSync("lhci-out/report.report.html","lhci-out/index.html");
+            fs.copyFileSync("lhci-out/live.report.html","lhci-out/index.html");
           '
 
-      # Publish reports to gh-pages:/reports/...
-      - name: Stage reports
+      # Upload raw reports for this workflow run (handy when you want details)
+      - name: Upload artifact (live LH reports)
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-live-${{ github.run_id }}
+          path: lhci-out
+
+      # Stage into gh-pages structure: /reports/lighthouse/<run_id>/ and /latest
+      - name: Stage reports for gh-pages
         run: |
           mkdir -p out/reports/lighthouse/${{ github.run_id }}
           cp -r lhci-out/* out/reports/lighthouse/${{ github.run_id }}/

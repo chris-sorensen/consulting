@@ -18,7 +18,7 @@ jobs:
       - name: Build Tailwind CSS
         run: |
           npm i -D tailwindcss@3.4.13
-          npx tailwindcss -i assets/input.css -o assets/site.css --minify
+          npx tailwindcss -c tailwind.config.js -i assets/input.css -o assets/site.css --minify
 
       - uses: JamesIves/github-pages-deploy-action@v4
         with:

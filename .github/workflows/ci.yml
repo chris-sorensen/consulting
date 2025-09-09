@@ -2,8 +2,6 @@ name: CI
 
 on:
   pull_request:
-  push:
-    branches: [main]
 
 permissions:
   contents: read
@@ -78,8 +76,6 @@ jobs:
           # Ensure we have the full git history for gitleaks to scan
           fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
-        with:
-          args: detect --source . --no-git --verbose --redact
         env:
           GITLEAKS_ENABLE_COMMENTS: "true"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -101,11 +97,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+
       - uses: ./.github/actions/stage-site
+
+      # Ensure Lighthouse CI is installed, start the local server and run the test
       - run: npm i -D @lhci/cli
       - run: npx http-server -p 39107 site -s & npx wait-on http://127.0.0.1:39107/index.html
       - run: |
           npx lhci autorun
+
       - name: Upload Lighthouse (local) reports
         if: always()
         uses: actions/upload-artifact@v4
