@@ -42,7 +42,7 @@ jobs:
           args: >-
             --verbose 
             --no-progress 
-            --base "https://chris-sorensen.github.io/consulting/"
+            --base-url "https://chris-sorensen.github.io/consulting/"
             --exclude "localhost|127\.0\.0\.1|chris-sorensen\\.github\\.io/consulting/reports/lighthouse/latest/?$"  
             ./site
         env:
