@@ -13,9 +13,9 @@ My marketing site for Fractional CTO & Cloud/SRE/DevSecOps consulting. Complianc
 ## Repo layout
 
 - `index.html` – site (Tailwind CDN)
-
+- `assets/` – images, fonts, icons
+- `insights/` – white papers and case studies (HTML)
 - `.github/workflows/` – CI, preview, deploy, scanners
-
 - `sitemap.xml`, `robots.txt` – SEO basics
 
 ## Local development

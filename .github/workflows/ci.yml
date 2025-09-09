@@ -99,11 +99,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+
       - uses: ./.github/actions/stage-site
+
+      # Ensure Lighthouse CI is installed, start the local server and run the test
       - run: npm i -D @lhci/cli
       - run: npx http-server -p 39107 site -s & npx wait-on http://127.0.0.1:39107/index.html
       - run: |
           npx lhci autorun
+
       - name: Upload Lighthouse (local) reports
         if: always()
         uses: actions/upload-artifact@v4
