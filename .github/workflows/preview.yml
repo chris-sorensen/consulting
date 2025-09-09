@@ -20,22 +20,16 @@ jobs:
 
       - name: Deploy (create/update/remove) preview
         uses: rossjrw/pr-preview-action@v1
+        id: deploy
         with:
           source-dir: site
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto
 
-      - name: Compute preview URL
-        id: urls
-        run: |
-          PR=${{ github.event.pull_request.number }}
-          echo "PR=$PR" >> $GITHUB_OUTPUT
-          echo "url=https://chris-sorensen.github.io/consulting/pr-preview/pr-${PR}/index.html" >> $GITHUB_OUTPUT
-
       - name: Wait for preview to be live
         run: |
-          URL='${{ steps.urls.outputs.url }}'
+          URL="${{ env.preview_url }}"
           for i in {1..60}; do
             code=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || true)
             if [ "$code" = "200" ]; then echo "OK"; exit 0; fi
@@ -46,11 +40,9 @@ jobs:
       - name: Run Lighthouse against preview URL
         run: |
           npm i -D lighthouse@12
-          PREVIEW_URL="https://chris-sorensen.github.io/consulting/pr-preview/pr-${{ github.event.pull_request.number }}/index.html"
-          echo "PREVIEW_URL=$PREVIEW_URL" >> "$GITHUB_ENV"
 
           mkdir -p lhci-local
-          npx lighthouse "$PREVIEW_URL" \
+          npx lighthouse ${{ env.preview_url }} \
             --output=json --output=html \
             --output-path="lhci-local/lighthouse" \
             --quiet \
@@ -83,8 +75,9 @@ jobs:
       - name: Upload PR artifacts
         if: always() && github.event.action != 'closed'
         uses: actions/upload-artifact@v4
+        id: artifact-upload-step
         with:
-          name: pr-${{ steps.urls.outputs.PR }}-lighthouse
+          name: pr-${{ github.event.number }}-lighthouse
           path: lhci-local/
 
       - name: Comment Lighthouse scores on PR
@@ -93,14 +86,14 @@ jobs:
         with:
           header: lighthouse
           message: |
-            **Lighthouse (PR preview)**
-            Preview: ${{ steps.urls.outputs.PREVIEW_URL }}
+            **Lighthouse Report**
+            Preview: ${{ env.preview_url }}
 
             - Performance: ${{ env.perf }}
             - Accessibility: ${{ env.a11y }}
             - Best Practices: ${{ env.best }}
             - SEO: ${{ env.seo }}
 
-            _Full report artifact: **pr-${{ steps.urls.outputs.PR }}-lighthouse**_
+            _Full report artifact:_ ${{ steps.artifact-upload-step.outputs.artifact-url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
