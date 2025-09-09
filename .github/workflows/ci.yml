@@ -26,8 +26,11 @@ jobs:
           check_favicon: true
           check_opengraph: true
           check_css: true
+          # Rewrite root-absolute /consulting/* to /
+          swap_urls: >
+            {"^/consulting/": "/"}
 
-  linkcheck:
+  link-check:
     name: Broken-link scan (lychee)
     runs-on: ubuntu-latest
     steps:
@@ -35,15 +38,26 @@ jobs:
 
       - uses: ./.github/actions/stage-site
 
+      # PRs: exclude live-only links; use a base URL to resolve /favicon.ico, etc.
       - uses: lycheeverse/lychee-action@v2   # Fast link checker
+        if: github.event_name == 'pull_request'
         with:
           args: >-
-            --verbose
-            --no-progress
-            --exclude "localhost|127\.0\.0\.1"
+            --verbose 
+            --no-progress 
+            --base-url "https://chris-sorensen.github.io/consulting/"
+            --exclude "localhost|127\.0\.0\.1|chris-sorensen\\.github\\.io/consulting/reports/lighthouse/latest/?$"  
             ./site
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      # main: enforce everything (no excludes)
+      - uses: lycheeverse/lychee-action@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          args: -v -n ./site
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   markdown:
     name: Markdown lint
@@ -83,16 +97,19 @@ jobs:
       - run: npx pa11y-ci
 
   lighthouse:
-    name: Lighthouse CI
+    name: Run local Lighthouse CI gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: ./.github/actions/stage-site
       - run: npm i -D @lhci/cli
       - run: npx http-server -p 39107 site -s & npx wait-on http://127.0.0.1:39107/index.html
-      - run: npx lhci autorun --collect.url=http://127.0.0.1:39107/index.html --upload.target=temporary-public-storage
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{secrets.LHCI_GITHUB_APP_TOKEN || ''}}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - run: |
+          npx lhci autorun
+      - name: Upload Lighthouse (local) reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-local-${{ github.run_id }}
+          path: lhci-local/**
+          retention-days: 7
