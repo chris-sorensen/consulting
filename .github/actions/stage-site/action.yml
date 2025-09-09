@@ -24,6 +24,7 @@ runs:
         cp -a index.html site/
         [ -d insights ] && cp -a insights site/ || true
         [ -f assets/site.css ] && cp -a assets/site.css site/assets/site.css
+        [ -f assets/site.js ] && cp -a assets/site.js site/assets/site.js
         [ -f favicon.ico ] && cp -a favicon.ico site/
         # disable Jekyll at serve time
         touch site/.nojekyll
