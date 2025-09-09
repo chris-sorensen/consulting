@@ -30,6 +30,7 @@ jobs:
         id: urls
         run: |
           PR=${{ github.event.pull_request.number }}
+          echo "PR=$PR" >> $GITHUB_OUTPUT
           echo "url=https://chris-sorensen.github.io/consulting/pr-preview/pr-${PR}/index.html" >> $GITHUB_OUTPUT
 
       - name: Wait for preview to be live
@@ -44,13 +45,14 @@ jobs:
 
       - name: Run Lighthouse against preview URL
         run: |
-          PREVIEW_URL="https://chris-sorensen.github.io/consulting/pr-preview/${{ github.event.pull_request.number }}/index.html"
+          npm i -D lighthouse@12
+          PREVIEW_URL="https://chris-sorensen.github.io/consulting/pr-preview/pr-${{ github.event.pull_request.number }}/index.html"
           echo "PREVIEW_URL=$PREVIEW_URL" >> "$GITHUB_ENV"
 
-          mkdir -p lhci-out
+          mkdir -p lhci-local
           npx lighthouse "$PREVIEW_URL" \
             --output=json --output=html \
-            --output-path=lhci-out/ \
+            --output-path="lhci-local/lighthouse" \
             --quiet \
             --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage --disable-gpu"
 
@@ -60,7 +62,7 @@ jobs:
         run: |
           node <<'NODE'
           const fs = require('fs');
-          const path = 'lhci-out/report.json';
+          const path = 'lhci-local/lighthouse.report.json';
           const r = JSON.parse(fs.readFileSync(path, 'utf8'));
           const s = {
             perf: Math.round(r.categories.performance.score*100),
@@ -68,22 +70,22 @@ jobs:
             seo:  Math.round(r.categories.seo.score*100),
             best: Math.round(r.categories['best-practices'].score*100)
           };
-          fs.writeFileSync('lhci-out/summary.json', JSON.stringify(s, null, 2));
+          fs.writeFileSync('lhci-local/lighthouse-summary.json', JSON.stringify(s, null, 2));
           NODE
-          cat lhci-out/summary.json
+          cat lhci-local/lighthouse-summary.json
 
       - name: Export summary to env (for PR comment)
         if: github.event.action != 'closed'
         id: vars
         run: |
-          jq -r '"perf=\(.perf)\na11y=\(.a11y)\nseo=\(.seo)\nbest=\(.best)"' lhci-out/summary.json >> "$GITHUB_ENV"
+          jq -r '"perf=\(.perf)\na11y=\(.a11y)\nseo=\(.seo)\nbest=\(.best)"' lhci-local/lighthouse-summary.json >> "$GITHUB_ENV"
 
       - name: Upload PR artifacts
         if: always() && github.event.action != 'closed'
         uses: actions/upload-artifact@v4
         with:
           name: pr-${{ steps.urls.outputs.PR }}-lighthouse
-          path: lhci-out/
+          path: lhci-local/
 
       - name: Comment Lighthouse scores on PR
         if: github.event.action != 'closed'
