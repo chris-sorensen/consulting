@@ -76,8 +76,8 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <section id="top" class="relative overflow-hidden">
+  <!-- Hero (avoid sectioning element around the H1 to prevent UA deprecation) -->
+  <div id="top" class="relative overflow-hidden" role="region" aria-labelledby="page-title">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="grid lg:grid-cols-2 gap-10 items-center">
         <div>
@@ -100,7 +100,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- Who I Help -->
   <section id="who" class="py-16 border-t bg-white">
