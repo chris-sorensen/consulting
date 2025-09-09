@@ -1,5 +1,6 @@
 # consulting
 
+![Gitleaks](https://img.shields.io/badge/protected%20by-gitleaks-blue)
 ![CI](https://github.com/chris-sorensen/consulting/actions/workflows/ci.yml/badge.svg)
 ![Deploy](https://github.com/chris-sorensen/consulting/actions/workflows/deploy.yml/badge.svg)
 [![Lighthouse](https://img.shields.io/endpoint?url=https://chris-sorensen.github.io/consulting/reports/lighthouse/latest/shields.json)](https://chris-sorensen.github.io/consulting/reports/lighthouse/latest/)
