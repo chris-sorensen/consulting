@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://chris-sorensen.github.io/consulting/sitemap.xml
-
-
