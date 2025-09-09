@@ -40,9 +40,10 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           args: >-
-            --verbose
-            --no-progress
-            --config .lycheecfg.toml
+            --verbose 
+            --no-progress 
+            --base "https://chris-sorensen.github.io/consulting/"
+            --exclude "localhost|127\.0\.0\.1|chris-sorensen\\.github\\.io/consulting/reports/lighthouse/latest/?$"  
             ./site
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -51,10 +52,7 @@ jobs:
       - uses: lycheeverse/lychee-action@v2
         if: github.ref == 'refs/heads/main'
         with:
-          args: >-
-            --verbose 
-            --no-progress 
-            ./site
+          args: -v -n ./site
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
