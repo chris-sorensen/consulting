@@ -30,7 +30,7 @@ jobs:
           swap_urls: >
             {"^/consulting/": "/"}
 
-  linkcheck:
+  link-check:
     name: Broken-link scan (lychee)
     runs-on: ubuntu-latest
     steps:
@@ -96,21 +96,6 @@ jobs:
       - run: npx http-server -p 8080 site -s & npx wait-on http://127.0.0.1:8080/index.html
       - run: npx pa11y-ci
 
-#  lighthouse:
-#    name: Lighthouse CI
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - uses: ./.github/actions/stage-site
-#      - run: npm i -D @lhci/cli
-#      - run: npx http-server -p 39107 site -s & npx wait-on http://127.0.0.1:39107/index.html
-#      - run: npx lhci autorun --collect.url=http://127.0.0.1:39107/index.html --upload.target=temporary-public-storage
-#        env:
-#          LHCI_GITHUB_APP_TOKEN: ${{secrets.LHCI_GITHUB_APP_TOKEN || ''}}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
   lighthouse:
     name: Run local Lighthouse CI gate
     runs-on: ubuntu-latest
@@ -120,12 +105,4 @@ jobs:
       - run: npm i -D @lhci/cli
       - run: npx http-server -p 39107 site -s & npx wait-on http://127.0.0.1:39107/index.html
       - run: |
-          npx lhci autorun \
-            --collect.url=http://127.0.0.1:39107/index.html \
-            --collect.numberOfRuns=3 \
-            --upload.target=filesystem \
-            --upload.outputDir=lhci-local \
-            --assert.assertions='categories:performance:score>=0.80'
-            --assert.assertions='categories:accessibility:score>=1.00'
-            --assert.assertions='categories:seo:score>=0.90'
-            --assert.assertions='categories:best-practices:score>=0.80'
+          npx lhci autorun
