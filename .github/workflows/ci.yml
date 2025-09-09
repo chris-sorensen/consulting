@@ -106,3 +106,10 @@ jobs:
       - run: npx http-server -p 39107 site -s & npx wait-on http://127.0.0.1:39107/index.html
       - run: |
           npx lhci autorun
+      - name: Upload Lighthouse (local) reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-local-${{ github.run_id }}
+          path: lhci-local/**
+          retention-days: 7
