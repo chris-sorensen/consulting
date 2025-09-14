@@ -24,7 +24,7 @@ jobs:
       - uses: browser-actions/setup-chrome@v2
 
       # Node for npx
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with: { node-version: '20' }
 
       # Give GitHub Pages a few seconds to serve the fresh content after deploy
