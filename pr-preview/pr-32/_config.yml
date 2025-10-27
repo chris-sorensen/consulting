@@ -1,0 +1,7 @@
+exclude:
+  - pr-preview/
+  - pr-preview/**/*
+  - node_modules/
+  - "**/node_modules/**"
+  - reports/
+  - ".github/"
