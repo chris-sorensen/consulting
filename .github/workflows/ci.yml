@@ -108,7 +108,7 @@ jobs:
 
       - name: Upload Lighthouse (local) reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lighthouse-local-${{ github.run_id }}
           path: lhci-local/**
