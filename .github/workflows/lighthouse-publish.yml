@@ -82,7 +82,7 @@ jobs:
 
       # Upload raw reports for this workflow run (handy when you want details)
       - name: Upload artifact (live LH reports)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lighthouse-live-${{ github.run_id }}
           path: lhci-out
