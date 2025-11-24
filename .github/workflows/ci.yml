@@ -11,7 +11,7 @@ jobs:
     name: Validate HTML & links
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/stage-site
 
@@ -32,7 +32,7 @@ jobs:
     name: Broken-link scan (lychee)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/stage-site
 
@@ -61,7 +61,7 @@ jobs:
     name: Markdown lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: DavidAnson/markdownlint-cli2-action@v20
         with:
           globs: |
@@ -71,7 +71,7 @@ jobs:
     name: Secrets scan (gitleaks)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # Ensure we have the full git history for gitleaks to scan
           fetch-depth: 0
@@ -84,7 +84,7 @@ jobs:
     name: Accessibility (pa11y-ci)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/stage-site
 
@@ -96,7 +96,7 @@ jobs:
     name: Run local Lighthouse CI gate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/stage-site
 
