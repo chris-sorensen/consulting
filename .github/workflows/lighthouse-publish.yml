@@ -18,7 +18,7 @@ jobs:
       LIVE_URL: https://chris-sorensen.github.io/consulting/
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       # Chrome for Lighthouse
       - uses: browser-actions/setup-chrome@v2
